@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import com.nonatosantos.design.recursos.AcaoAposGerarNota;
+
 public class NotaFiscalBuilder {
 	private final double TARIFA_IMPOSTO = 0.05;
 
@@ -14,6 +16,16 @@ public class NotaFiscalBuilder {
 	private double impostos;
 	private String observacoes;
 	private Calendar data;
+
+	private List<AcaoAposGerarNota> executaAcoes;
+
+	public NotaFiscalBuilder() {
+		this.executaAcoes = new ArrayList<AcaoAposGerarNota>();
+	}
+
+	public void adicionaAcao(AcaoAposGerarNota acao) {
+		this.executaAcoes.add(acao);
+	}
 
 	public NotaFiscalBuilder paraEmpresa(String razaoSocial) {
 		this.razaoSocial = razaoSocial;
@@ -46,7 +58,12 @@ public class NotaFiscalBuilder {
 	}
 
 	public NotaFiscal emiteNf() {
-		return new NotaFiscal(razaoSocial, cnpj, data, valorBruto, impostos, todosItens, observacoes);
+		NotaFiscal nf = new NotaFiscal(razaoSocial, cnpj, data, valorBruto, impostos, todosItens, observacoes);
+		for (AcaoAposGerarNota acoes : executaAcoes) {
+			acoes.executa(nf);
+		}
+
+		return nf;
 	}
 
 }

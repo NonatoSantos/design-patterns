@@ -1,13 +1,13 @@
 package com.nonatosantos.design.model;
 
-public abstract class TemplateDeImpostoCondicional implements Imposto {
+public abstract class TemplateDeImpostoCondicional extends Imposto {
 
 	@Override
 	public double calcula(Orcamento orcamento) {
 		if (usarMaximaTaxacao(orcamento)) {
-			return maximaTaxacao(orcamento);
+			return maximaTaxacao(orcamento) + calculoOutroImposto(orcamento);
 		} else {
-			return minimaTaxacao(orcamento);
+			return minimaTaxacao(orcamento) + calculoOutroImposto(orcamento);
 		}
 
 	}
